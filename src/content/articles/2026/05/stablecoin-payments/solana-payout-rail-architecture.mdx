@@ -1,0 +1,54 @@
+---
+title: "Designing a Solana stablecoin payment architecture for B2B payouts"
+description: "Reference architecture for enterprise B2B payout programs using Solana stablecoin transfers, issuers, and custody integration."
+category: "stablecoin-payments"
+tags:
+  - stablecoins
+  - payments
+  - infrastructure
+  - integration
+author: "fazezero-editorial"
+date: 2026-05-15
+status: "published"
+featured: false
+series: "solana-stablecoin-payout-rail"
+seriesOrder: 2
+---
+
+## Overview
+
+Replacing a card-network global payout flow with a Solana stablecoin rail requires a clear architecture across funding, issuance, transfer, compliance, and settlement layers. This second article in the series describes a reference model that enterprise teams can adapt when designing production payout infrastructure.
+
+The model assumes the enterprise acts as payment originator, uses regulated stablecoin issuers or qualified partners, and maintains off-chain records for audit and reconciliation.
+
+## Key considerations
+
+### Funding and treasury layer
+
+Treasury funds a corporate wallet or custodial account through fiat on-ramp relationships with a stablecoin issuer or payment partner. Policies should define who authorizes minting or purchases, daily limits, and which entities hold signing authority. Treasury must treat on-chain balances as part of cash positioning alongside bank accounts.
+
+### Transfer execution on Solana
+
+Payout initiation flows from an internal orchestration service to a signing layer that constructs Solana transactions transferring stablecoins to recipient wallet addresses. Teams should standardize on one or two supported stablecoin mints per corridor to reduce operational complexity. Confirm finality thresholds internally before marking payouts as settled.
+
+### Address management and validation
+
+Wrong-address and wrong-chain transfers are common early failures. Implement allowlists, address verification callbacks, and human approval for new recipients. Store recipient wallet metadata alongside traditional KYC records, including chain, mint, and address checksum validation results.
+
+### Off-ramp and recipient delivery
+
+Many B2B recipients ultimately need local fiat. Architecture should specify whether recipients self-off-ramp or whether a partner converts stablecoins after on-chain receipt. Off-ramp timing affects when the enterprise considers a payout complete versus merely transmitted.
+
+## Implementation notes
+
+Separate hot wallets for operational payouts from cold or custodial storage for float. Multi-signature or hardware-backed signing should protect high-value transfers. Rate-limit automated payout jobs to detect anomalous batch sizes before broadcast.
+
+Use dedicated Solana RPC providers with monitoring and failover. Internal dashboards should show transaction signature, confirmation count, block time, and reconciliation status. Do not rely solely on block explorers for production operations.
+
+Integrate webhook or polling services that notify orchestration when transactions reach defined finality. Pair on-chain events with fiat ledger entries from issuers and banking partners.
+
+Document failure modes: insufficient SOL for fees, mint freeze events, RPC outages, and partner off-ramp delays. Each mode needs an escalation owner and customer communication template.
+
+## Summary
+
+A Solana stablecoin payout architecture spans treasury funding, controlled on-chain transfer, address governance, and off-ramp coordination. Teams that define these layers before integration reduce rework when connecting compliance systems and ERP workflows covered in the next articles.

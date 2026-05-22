@@ -1,0 +1,52 @@
+---
+title: "Compliance controls for Solana-based stablecoin transfer programs"
+description: "AML, sanctions screening, and policy controls enterprises need when operating Solana stablecoin payout programs at scale."
+category: "stablecoin-payments"
+tags:
+  - stablecoins
+  - compliance
+  - aml
+  - kyc
+author: "fazezero-editorial"
+date: 2026-05-16
+status: "published"
+featured: false
+series: "solana-stablecoin-payout-rail"
+seriesOrder: 3
+---
+
+## Overview
+
+Card-network payout programs inherit compliance workflows from acquirers, issuers, and program managers. Solana stablecoin payout programs place more control—and more responsibility—on the enterprise and its partners. This third article outlines compliance controls teams should implement before replacing legacy global transfer flows.
+
+## Key considerations
+
+### Customer and counterparty due diligence
+
+Apply tiered KYC to payout recipients based on risk, volume, and jurisdiction. Collect beneficial ownership and source-of-funds documentation where required. Wallet addresses should be linked to verified identities in case management systems, not stored as standalone strings.
+
+### Sanctions and wallet screening
+
+Screen recipients, originating entities, and wallet addresses against applicable sanctions lists before each payout batch. Integrate blockchain analytics to detect exposure to flagged clusters, mixers, or high-risk service categories. Define procedures for blocking, holding, and reporting suspicious activity.
+
+### Travel rule and recordkeeping
+
+Cross-border transfers may trigger travel rule or equivalent data-sharing obligations depending on jurisdiction and entity role. Confirm which party transmits required originator and beneficiary information. Retain transaction records, screening results, and approval logs for examiner review.
+
+### Licensing and partner reliance
+
+Determine whether the enterprise needs money transmission, payment institution, or virtual asset service provider authorization for Solana payout activity in each corridor. If partners hold licenses, document reliance agreements and monitor their compliance status. Internal policies should not assume partner licensing covers all enterprise activities.
+
+## Implementation notes
+
+Embed compliance checks in the payout orchestration path rather than as a manual pre-step. Block transaction construction until screening passes and approvals are recorded. Failed screenings should generate cases with assigned analysts rather than silent drops.
+
+Configure policy rules for velocity limits, geographic restrictions, and recipient categories. Update rules when product scope expands to new corridors or recipient types.
+
+Train treasury and operations staff on red flags specific to on-chain payouts, including rapid address rotation and nested wallet structures. Compliance teams should participate in pilot design and sign off on go-live criteria.
+
+Conduct independent testing of screening integrations and case workflows before production launch. Test both automated hits and manual review paths.
+
+## Summary
+
+Solana stablecoin payout programs require tiered KYC, wallet screening, sanctions controls, and clear licensing analysis. Teams that embed compliance in orchestration—not as an afterthought—build programs that can scale beyond pilot phase and withstand regulatory examination.

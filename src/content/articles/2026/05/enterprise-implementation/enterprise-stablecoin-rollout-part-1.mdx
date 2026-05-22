@@ -1,0 +1,56 @@
+---
+title: "Enterprise stablecoin rollout, part 1: Program design and stakeholder alignment"
+description: "How enterprise teams should define scope, sponsors, and success criteria before launching a stablecoin payment program."
+category: "enterprise-implementation"
+tags:
+  - implementation
+  - enterprise
+  - governance
+  - stablecoins
+author: "fazezero-editorial"
+date: 2026-05-14
+status: "published"
+featured: false
+series: "enterprise-stablecoin-rollout"
+seriesOrder: 1
+---
+
+## Overview
+
+Stablecoin payment programs rarely fail because of a single technical defect. More often, they stall when scope is unclear, sponsors are misaligned, or success criteria are defined after launch. Part one of this series covers the program design decisions that institutions should resolve before integration work begins.
+
+This article focuses on stakeholder alignment, bounded scope, and the operating model that supports a controlled rollout.
+
+## Key considerations
+
+### Executive sponsorship and decision rights
+
+Assign an executive sponsor with authority to resolve cross-functional trade-offs. Treasury, compliance, legal, and technology teams will disagree on priorities at some point. Without a named decision owner, programs defer choices until external deadlines force rushed compromises.
+
+Document which committee or role approves corridor expansion, limit increases, and new counterparty types. Decision rights should be established before vendor selection, not during production incidents.
+
+### Bounded initial scope
+
+Select one use case with measurable value: supplier payouts in a single corridor, inter-entity treasury transfers, or merchant settlement for a defined segment. Avoid launching multiple flows simultaneously unless teams have prior production experience with digital asset operations.
+
+Define what is explicitly out of scope for phase one. Common exclusions include consumer-facing products, unsupported chains, and corridors without banking partner coverage.
+
+### Success criteria and exit conditions
+
+Establish quantitative targets before the pilot: settlement time, fee comparison against wire transfers, reconciliation effort, and exception rate. Pair success criteria with exit conditions that trigger pause or rollback if thresholds are breached.
+
+Review criteria with finance and audit stakeholders so post-pilot assessments are credible to internal governance forums.
+
+## Implementation notes
+
+Run a kickoff workshop with representatives from treasury, compliance, legal, IT, and operations. Produce a one-page program charter covering scope, sponsors, timeline, and reporting cadence.
+
+Create a RACI matrix for key activities: wallet provisioning, transaction approval, sanctions screening, reconciliation, and vendor management. Gaps in ownership become visible before go-live pressure intensifies.
+
+Identify dependencies on third parties early: banking partners, issuers, custodians, and KYC providers. Dependency timelines often constrain program schedules more than internal development capacity.
+
+Schedule a pre-integration readiness review once the charter and RACI are complete. Do not begin technical build until compliance and legal sign off on the intended operating model.
+
+## Summary
+
+Program design and stakeholder alignment determine whether a stablecoin rollout proceeds with clarity or friction. Institutions that define sponsors, bounded scope, and success criteria upfront create a foundation for the integration and operations work covered in parts two and three of this series.
