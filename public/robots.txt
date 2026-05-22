@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fazezero.com/sitemap-index.xml
+Sitemap: https://blog.fazezero.com/sitemap-index.xml
