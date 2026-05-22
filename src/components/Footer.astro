@@ -1,47 +1,119 @@
 ---
-import { siteName, socialLinks } from '@/data/site';
+import SocialIcon from '@/components/SocialIcon.astro';
+import {
+  footerBlogLinks,
+  footerCompanyLinks,
+  footerLegalLinks,
+  footerTopicLinks,
+  socialLinks,
+} from '@/data/footer';
+import { siteDescription, siteName } from '@/data/site';
 
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-auto border-t border-brand-border" style="background: var(--footer-bg);">
-  <div class="container-page py-12">
-    <div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-      <div class="max-w-md space-y-4">
-        <p class="site-logo text-brand-ink" style="color: var(--footer-text);">
+<footer class="site-footer mt-auto border-t border-brand-border">
+  <div class="container-page py-14 lg:py-16">
+    <div class="grid gap-10 lg:grid-cols-12 lg:gap-8">
+      <div class="space-y-6 lg:col-span-4">
+        <a href="/" class="site-logo inline-block">
           faze<span class="site-logo-accent">ZERO</span>
+        </a>
+        <p class="max-w-sm text-sm leading-relaxed text-footer-muted">
+          {siteDescription}
         </p>
-        <p class="text-sm leading-relaxed" style="color: var(--footer-muted);">
-          Institutional insights on stablecoin payments, tokenization, compliance, and digital finance.
-        </p>
-      </div>
 
-      <div class="space-y-3">
-        <p class="text-sm font-semibold" style="color: var(--footer-text);">Connect</p>
-        <ul class="space-y-2">
+        <div class="flex flex-wrap items-center gap-2">
           {
             socialLinks.map((link) => (
-              <li>
-                <a
-                  href={link.url}
-                  class="text-sm transition-colors hover:text-brand-primary"
-                  style="color: var(--footer-muted);"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {link.label}
-                </a>
-              </li>
+              <a
+                href={link.url}
+                class="footer-social-link"
+                aria-label={link.label}
+                target={link.url.startsWith('http') ? '_blank' : undefined}
+                rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                <SocialIcon icon={link.icon} />
+              </a>
             ))
           }
-        </ul>
+        </div>
+      </div>
+
+      <div class="grid gap-8 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-3">
+        <div>
+          <h2 class="footer-heading">Blog</h2>
+          <ul class="footer-links">
+            {
+              footerBlogLinks.map((link) => (
+                <li>
+                  <a href={link.href} class="footer-link">
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="footer-heading">Topics</h2>
+          <ul class="footer-links">
+            {
+              footerTopicLinks.map((link) => (
+                <li>
+                  <a href={link.href} class="footer-link">
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="footer-heading">Company</h2>
+          <ul class="footer-links">
+            {
+              footerCompanyLinks.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="footer-link"
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
     </div>
 
-    <div class="mt-10 border-t pt-6" style="border-color: rgba(255, 255, 255, 0.1);">
-      <p class="text-sm" style="color: var(--footer-muted);">
+    <div class="footer-bottom mt-12 flex flex-col gap-4 border-t border-footer-divider pt-8 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-sm text-footer-muted">
         &copy; {year} {siteName}. All rights reserved.
       </p>
+
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        {
+          footerLegalLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="footer-link text-sm"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </footer>

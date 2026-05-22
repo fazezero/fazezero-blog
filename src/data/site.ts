@@ -1,5 +1,6 @@
 import { defaultAuthorId } from './authors';
 import { categories } from './categories';
+import type { FooterLink, SocialLink } from './footer';
 import * as routes from '@/lib/routes';
 
 export interface NavItem {
@@ -7,10 +8,8 @@ export interface NavItem {
   href: string;
 }
 
-export interface SocialLink {
-  label: string;
-  url: string;
-}
+export type { FooterLink, SocialLink, SocialIconId } from './footer';
+export { footerBlogLinks, footerCompanyLinks, socialLinks } from './footer';
 
 export const siteName = 'FazeZero';
 export const siteDescription =
@@ -33,9 +32,4 @@ export const navigation: NavItem[] = [
   { label: 'Series', href: routes.series() },
   { label: 'Tags', href: routes.tags() },
   { label: 'Search', href: routes.search() },
-];
-
-export const socialLinks: SocialLink[] = [
-  { label: 'LinkedIn', url: 'https://linkedin.com/company/fazezero' },
-  { label: 'X', url: 'https://x.com/fazezero' },
 ];
