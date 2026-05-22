@@ -17,10 +17,42 @@ fi
 AWS_REGION="${AWS_REGION:-us-east-1}"
 OUTPUT_DIR="dist"
 
+if [ -n "${AWS_PROFILE:-}" ]; then
+  export AWS_PROFILE
+  echo "Using AWS profile: ${AWS_PROFILE}"
+fi
+
+verify_aws_credentials() {
+  if aws sts get-caller-identity --region "$AWS_REGION" >/dev/null 2>&1; then
+    echo "AWS credentials valid: $(aws sts get-caller-identity --query Arn --output text --region "$AWS_REGION")"
+    return 0
+  fi
+
+  cat <<'EOF' >&2
+AWS credentials are missing or invalid.
+
+Local deploy requires an authenticated AWS CLI session with S3 and CloudFront access.
+
+Options:
+  1. SSO (recommended):
+       aws sso login --profile YOUR_PROFILE
+       Add to .env: AWS_PROFILE=YOUR_PROFILE
+
+  2. Clear stale access keys if you use SSO/role-based auth:
+       unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+
+  3. Let GitHub Actions deploy instead — push to main uses OIDC via AWS_ROLE_ARN.
+
+EOF
+  return 1
+}
+
 npm run build
 
 test -d "$OUTPUT_DIR"
 test -f "$OUTPUT_DIR/index.html"
+
+verify_aws_credentials
 
 echo "Deploying static assets (excluding HTML)..."
 aws s3 sync "$OUTPUT_DIR" "s3://${S3_BUCKET_NAME}/" \
