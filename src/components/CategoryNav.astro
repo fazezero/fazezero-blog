@@ -1,6 +1,6 @@
 ---
 import { getAllCategories } from '@/data/categories';
-import { blog } from '@/lib/routes';
+import { blog, category as categoryRoute } from '@/lib/routes';
 
 interface Props {
   activeCategory?: string;
@@ -23,17 +23,17 @@ const categories = getAllCategories();
     All
   </a>
   {
-    categories.map((category) => (
+    categories.map((item) => (
       <a
-        href={`/blog/category/${category.slug}`}
+        href={categoryRoute(item.slug)}
         class:list={[
           'rounded-full border px-3 py-1.5 text-sm transition-colors',
-          activeCategory === category.slug
+          activeCategory === item.slug
             ? 'border-brand-navy bg-brand-navy text-white'
             : 'border-brand-border text-brand-muted hover:border-brand-slate hover:text-brand-navy',
         ]}
       >
-        {category.title}
+        {item.title}
       </a>
     ))
   }

@@ -15,7 +15,7 @@ export interface SocialLink {
 export const siteName = 'FazeZero';
 export const siteDescription =
   'Institutional insights on stablecoin payments, tokenization, compliance, and digital finance implementation.';
-export const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'https://fazezero.com';
+export const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'https://blog.fazezero.com';
 export const defaultSeoTitle = `${siteName} Blog`;
 export const defaultSeoDescription = siteDescription;
 export const defaultSocialImage = `${siteUrl}/social/default-og.png`;
