@@ -10,7 +10,7 @@ const siteUrl = process.env.PUBLIC_SITE_URL ?? 'https://blog.fazezero.com';
 export default defineConfig({
   site: siteUrl,
   output: 'static',
-  trailingSlash: 'always',
+  trailingSlash: 'never',
   integrations: [
     mdx(),
     tailwind({ applyBaseStyles: false }),

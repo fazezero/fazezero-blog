@@ -186,11 +186,13 @@ npm run deploy:aws
 
 The script loads `.env`, builds the site, syncs `dist/` to S3 (immutable assets + no-cache HTML), and invalidates CloudFront.
 
-### CloudFront URL rewrite (optional)
+### CloudFront viewer request function (required)
 
-The deploy script uploads each page to three S3 keys (`route/index.html`, `route`, and `route/`), so nested links work on S3 REST origins without a CloudFront function.
+S3 REST origins do not resolve `/blog/category/foo` to `index.html`. A custom **404 → index.html** error response does **not** fix this (S3 returns 403 AccessDenied).
 
-If you prefer a slimmer bucket, attach [`infrastructure/cloudfront-index-rewrite.js`](infrastructure/cloudfront-index-rewrite.js) to the distribution **Viewer request** instead.
+Attach the function in [`infrastructure/cloudfront-index-rewrite.js`](infrastructure/cloudfront-index-rewrite.js) to **Viewer request**. See [`infrastructure/README.md`](infrastructure/README.md).
+
+### CloudFront URL rewrite (deploy script)
 
 ## Project structure
 

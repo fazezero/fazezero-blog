@@ -30,7 +30,7 @@ const tagLabel = getTagLabel(tag) || formatTagLabel(tag);
     emptyTitle={`No articles tagged "${tagLabel}"`}
     emptyMessage="Articles with this tag will appear here once MDX content is published."
     emptyCtaLabel="Browse all tags"
-    emptyCtaHref="/blog/tags/"
+    emptyCtaHref="/blog/tags"
     getPagePath={(page) => tagRoute(tag, page)}
   />
 </BlogLayout>
