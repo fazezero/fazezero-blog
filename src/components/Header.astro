@@ -1,22 +1,23 @@
 ---
 import ThemeToggle from '@/components/ThemeToggle.astro';
-import { archive, blog, home, search, tags } from '@/lib/routes';
+import { archive, blog, search } from '@/lib/routes';
 
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
-const navItems = [
-  { label: 'Home', href: home() },
-  { label: 'Blog', href: blog() },
-  { label: 'Archive', href: archive() },
-  { label: 'Tags', href: tags() },
-  { label: 'Search', href: search() },
-];
+const navItems = [{ label: 'Archive', href: archive() }];
+
+function isBlogActive(): boolean {
+  return (
+    currentPath === '/blog' ||
+    (currentPath.startsWith('/blog/') &&
+      !currentPath.startsWith('/blog/archive') &&
+      !currentPath.startsWith('/blog/tags') &&
+      !currentPath.startsWith('/blog/series'))
+  );
+}
 
 function isActive(href: string): boolean {
   const normalized = href.replace(/\/$/, '') || '/';
-  if (normalized === '/blog') {
-    return currentPath === '/blog' || (currentPath.startsWith('/blog/') && !currentPath.startsWith('/blog/archive') && !currentPath.startsWith('/blog/tags') && !currentPath.startsWith('/blog/series'));
-  }
   return currentPath === normalized || currentPath.startsWith(`${normalized}/`);
 }
 ---
@@ -26,13 +27,13 @@ function isActive(href: string): boolean {
   style="background: var(--header-bg);"
 >
   <div class="container-page flex items-center justify-between py-4">
-    <a href="/" class="site-logo">
+    <a href={blog()} class:list={['site-logo', isBlogActive() && 'text-brand-primary']}>
       faze<span class="site-logo-accent">ZERO</span>
       <span class="ml-2 text-sm font-normal text-brand-muted">Blog</span>
     </a>
 
-    <div class="flex items-center gap-3">
-      <nav class="hidden items-center gap-5 lg:flex" aria-label="Main navigation">
+    <div class="flex items-center gap-2">
+      <nav class="hidden items-center gap-4 lg:flex" aria-label="Main navigation">
         {
           navItems.map((item) => (
             <a
@@ -44,6 +45,21 @@ function isActive(href: string): boolean {
           ))
         }
       </nav>
+
+      <a
+        href={search()}
+        class:list={['theme-toggle', isActive(search()) && 'border-brand-primary text-brand-primary']}
+        aria-label="Search"
+      >
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+          />
+        </svg>
+      </a>
 
       <ThemeToggle />
 
@@ -68,7 +84,7 @@ function isActive(href: string): boolean {
     style="background: var(--header-bg);"
     aria-label="Mobile navigation"
   >
-    <div class="container-page flex flex-col gap-1 py-4">
+    <div class="container-page flex flex-col gap-1 py-3">
       {
         navItems.map((item) => (
           <a
