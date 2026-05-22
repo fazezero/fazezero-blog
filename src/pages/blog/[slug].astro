@@ -1,18 +1,24 @@
 ---
 import ArticleLayout from '@/layouts/ArticleLayout.astro';
-import { getPublishedArticles, getEntrySlug } from '@/lib/content';
+import { render } from 'astro:content';
+import { getArticleBySlug, getPublishedArticles, getEntrySlug } from '@/lib/content';
 
 export async function getStaticPaths() {
   const articles = await getPublishedArticles();
 
   return articles.map((entry) => ({
     params: { slug: getEntrySlug(entry) },
-    props: { entry },
   }));
 }
 
-const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { slug } = Astro.params;
+const entry = await getArticleBySlug(slug!);
+
+if (!entry) {
+  return Astro.redirect('/404');
+}
+
+const { Content } = await render(entry);
 ---
 
 <ArticleLayout entry={entry}>
