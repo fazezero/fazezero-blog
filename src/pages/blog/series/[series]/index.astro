@@ -1,0 +1,35 @@
+---
+import ArticleList from '@/components/ArticleList.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { formatSeriesLabel, getAllSeries, getArticlesBySeries, getTotalPages } from '@/lib/content';
+import { blog, series as seriesRoute, seriesDetail } from '@/lib/routes';
+
+export async function getStaticPaths() {
+  const allSeries = await getAllSeries();
+
+  return allSeries.map((seriesSlug) => ({
+    params: { series: seriesSlug },
+    props: { seriesSlug, currentPage: 1 },
+  }));
+}
+
+const { seriesSlug, currentPage } = Astro.props;
+const articles = await getArticlesBySeries(seriesSlug);
+const seriesLabel = formatSeriesLabel(seriesSlug);
+---
+
+<BlogLayout
+  title={`Series: ${seriesLabel}`}
+  description={`Articles in the ${seriesLabel} series.`}
+  canonicalPath={seriesDetail(seriesSlug)}
+>
+  <ArticleList
+    allArticles={articles}
+    currentPage={currentPage}
+    emptyTitle={`No articles in "${seriesLabel}"`}
+    emptyMessage="Articles in this series will appear here once MDX content with matching series metadata is published."
+    emptyCtaLabel="Browse all series"
+    emptyCtaHref={seriesRoute()}
+    getPagePath={(page) => seriesDetail(seriesSlug, page)}
+  />
+</BlogLayout>

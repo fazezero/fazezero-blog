@@ -1,0 +1,42 @@
+---
+import EmptyState from '@/components/EmptyState.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { formatSeriesLabel, getAllSeries } from '@/lib/content';
+import { blog, series as seriesRoute, seriesDetail } from '@/lib/routes';
+
+const allSeries = await getAllSeries();
+---
+
+<BlogLayout
+  title="Series"
+  description="Browse multi-part article series."
+  canonicalPath={seriesRoute()}
+>
+  {
+    allSeries.length === 0 ? (
+      <EmptyState
+        title="No series yet"
+        message="Article series will appear here once published articles include a series field in frontmatter."
+        ctaLabel="View all articles"
+        ctaHref={blog()}
+      />
+    ) : (
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {
+          allSeries.map((seriesSlug) => (
+            <li>
+              <a
+                href={seriesDetail(seriesSlug)}
+                class="block rounded-lg border border-brand-border bg-white p-6 transition-shadow hover:shadow-sm"
+              >
+                <span class="text-lg font-semibold text-brand-navy">
+                  {formatSeriesLabel(seriesSlug)}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    )
+  }
+</BlogLayout>

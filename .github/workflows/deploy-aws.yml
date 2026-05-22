@@ -1,0 +1,130 @@
+name: Deploy to AWS S3 and CloudFront
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "20"
+  OUTPUT_DIR: "dist"
+  AWS_REGION: "us-east-1"
+  PUBLIC_SITE_URL: "https://blog.fazezero.com"
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Clean workspace
+        run: |
+          rm -rf node_modules dist .astro
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate content
+        run: npm run validate:content
+
+      - name: Check banned claims
+        run: npm run check:banned-claims
+
+      - name: Build Astro site
+        run: npm run build
+        env:
+          PUBLIC_SITE_URL: ${{ env.PUBLIC_SITE_URL }}
+
+      - name: Verify build output
+        run: |
+          test -d "${{ env.OUTPUT_DIR }}"
+          test -f "${{ env.OUTPUT_DIR }}/index.html"
+          test -d "${{ env.OUTPUT_DIR }}/pagefind"
+          echo "Build output verified"
+
+      - name: Check AWS role ARN
+        run: |
+          if [ -z "${{ secrets.AWS_ROLE_ARN }}" ]; then
+            echo "AWS_ROLE_ARN secret is missing"
+            exit 1
+          fi
+          echo "AWS_ROLE_ARN secret present"
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify AWS credentials
+        run: |
+          aws sts get-caller-identity --region ${{ env.AWS_REGION }}
+          echo "AWS Account: $(aws sts get-caller-identity --query Account --output text)"
+          echo "AWS User/Role: $(aws sts get-caller-identity --query Arn --output text)"
+
+      - name: Deploy to S3
+        run: |
+          echo "Deploying static assets (excluding HTML)..."
+          echo "Source: ${{ env.OUTPUT_DIR }}"
+          echo "Bucket: s3://${{ secrets.S3_BUCKET_NAME }}/"
+
+          aws s3 sync "${{ env.OUTPUT_DIR }}" "s3://${{ secrets.S3_BUCKET_NAME }}/" \
+            --delete \
+            --exact-timestamps \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*.html"
+
+          echo "Uploading HTML files with no-cache..."
+          aws s3 sync "${{ env.OUTPUT_DIR }}" "s3://${{ secrets.S3_BUCKET_NAME }}/" \
+            --exclude "*" \
+            --include "*.html" \
+            --cache-control "no-cache, must-revalidate"
+
+          echo "S3 deploy completed"
+
+      - name: Invalidate CloudFront cache
+        id: invalidate
+        continue-on-error: true
+        run: |
+          echo "Invalidating CloudFront..."
+          echo "Distribution ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
+
+          INVALIDATION_ID=$(aws cloudfront create-invalidation \
+            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*" \
+            --query "Invalidation.Id" \
+            --output text) || {
+            echo "::warning::CloudFront invalidation failed"
+            exit 1
+          }
+
+          echo "Invalidation created: $INVALIDATION_ID"
+          aws cloudfront wait invalidation-completed \
+            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --id "$INVALIDATION_ID" || echo "Timeout waiting for invalidation"
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          if [ "${{ steps.invalidate.outcome }}" = "failure" ]; then
+            echo "Deploy complete — S3 updated, CloudFront cache NOT invalidated"
+          else
+            echo "Deployment complete"
+          fi
+          echo "Bucket: ${{ secrets.S3_BUCKET_NAME }}"
+          echo "Distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

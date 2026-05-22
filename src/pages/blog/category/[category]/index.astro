@@ -1,0 +1,36 @@
+---
+import ArticleList from '@/components/ArticleList.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { getAllCategories } from '@/data/categories';
+import { getArticlesByCategory, getTotalPages } from '@/lib/content';
+import { blog, category as categoryRoute } from '@/lib/routes';
+
+export async function getStaticPaths() {
+  const categories = getAllCategories();
+
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: { category, currentPage: 1 },
+  }));
+}
+
+const { category, currentPage } = Astro.props;
+const articles = await getArticlesByCategory(category.slug);
+---
+
+<BlogLayout
+  title={category.title}
+  description={category.description}
+  activeCategory={category.slug}
+  canonicalPath={categoryRoute(category.slug)}
+>
+  <ArticleList
+    allArticles={articles}
+    currentPage={currentPage}
+    emptyTitle={`No articles in ${category.title}`}
+    emptyMessage="Articles in this category will appear here once MDX content is published to the matching category folder."
+    ctaLabel="View all articles"
+    ctaHref={blog()}
+    getPagePath={(page) => categoryRoute(category.slug, page)}
+  />
+</BlogLayout>

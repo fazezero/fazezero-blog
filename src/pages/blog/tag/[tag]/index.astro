@@ -1,0 +1,36 @@
+---
+import ArticleList from '@/components/ArticleList.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { getTagLabel } from '@/data/tags';
+import { formatTagLabel, getAllTags, getArticlesByTag, getTotalPages } from '@/lib/content';
+import { blog, tag as tagRoute } from '@/lib/routes';
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { tag, currentPage: 1 },
+  }));
+}
+
+const { tag, currentPage } = Astro.props;
+const articles = await getArticlesByTag(tag);
+const tagLabel = getTagLabel(tag) || formatTagLabel(tag);
+---
+
+<BlogLayout
+  title={`Tag: ${tagLabel}`}
+  description={`Articles tagged with ${tagLabel}.`}
+  canonicalPath={tagRoute(tag)}
+>
+  <ArticleList
+    allArticles={articles}
+    currentPage={currentPage}
+    emptyTitle={`No articles tagged "${tagLabel}"`}
+    emptyMessage="Articles with this tag will appear here once MDX content is published."
+    emptyCtaLabel="Browse all tags"
+    emptyCtaHref="/blog/tags"
+    getPagePath={(page) => tagRoute(tag, page)}
+  />
+</BlogLayout>

@@ -1,0 +1,44 @@
+---
+import { siteName, socialLinks } from '@/data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-auto border-t border-brand-border bg-brand-surface">
+  <div class="container-page py-12">
+    <div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+      <div class="max-w-md space-y-3">
+        <p class="text-base font-semibold text-brand-navy">{siteName}</p>
+        <p class="text-sm leading-relaxed text-brand-muted">
+          Institutional insights on stablecoin payments, tokenization, compliance, and digital finance.
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <p class="text-sm font-medium text-brand-navy">Connect</p>
+        <ul class="space-y-2">
+          {
+            socialLinks.map((link) => (
+              <li>
+                <a
+                  href={link.url}
+                  class="text-sm text-brand-muted hover:text-brand-navy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 border-t border-brand-border pt-6">
+      <p class="text-sm text-brand-muted">
+        &copy; {year} {siteName}. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

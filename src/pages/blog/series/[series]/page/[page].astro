@@ -1,0 +1,51 @@
+---
+import ArticleList from '@/components/ArticleList.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import {
+  formatSeriesLabel,
+  getAllSeries,
+  getArticlesBySeries,
+  getTotalPages,
+} from '@/lib/content';
+import { seriesDetail } from '@/lib/routes';
+
+export async function getStaticPaths() {
+  const allSeries = await getAllSeries();
+  const paths: Array<{
+    params: { series: string; page: string };
+    props: { seriesSlug: string; currentPage: number };
+  }> = [];
+
+  for (const seriesSlug of allSeries) {
+    const articles = await getArticlesBySeries(seriesSlug);
+    const totalPages = getTotalPages(articles.length);
+
+    for (let page = 2; page <= totalPages; page++) {
+      paths.push({
+        params: { series: seriesSlug, page: String(page) },
+        props: { seriesSlug, currentPage: page },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { seriesSlug, currentPage } = Astro.props;
+const articles = await getArticlesBySeries(seriesSlug);
+const seriesLabel = formatSeriesLabel(seriesSlug);
+---
+
+<BlogLayout
+  title={`Series: ${seriesLabel} — Page ${currentPage}`}
+  description={`Articles in the ${seriesLabel} series.`}
+  canonicalPath={seriesDetail(seriesSlug, currentPage)}
+>
+  <ArticleList
+    allArticles={articles}
+    currentPage={currentPage}
+    emptyTitle={`No articles in "${seriesLabel}"`}
+    emptyMessage="Articles in this series will appear here once MDX content is published."
+    getPagePath={(page) => seriesDetail(seriesSlug, page)}
+  />
+</BlogLayout>

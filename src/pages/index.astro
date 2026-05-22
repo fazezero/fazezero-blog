@@ -1,0 +1,47 @@
+---
+import Layout from '@/components/Layout.astro';
+import { siteDescription, siteName } from '@/data/site';
+import { blog } from '@/lib/routes';
+import { resolveCanonical } from '@/lib/seo';
+---
+
+<Layout
+  title={`${siteName} | Institutional Digital Finance Insights`}
+  description={siteDescription}
+  canonical={resolveCanonical('/')}
+>
+  <section class="container-page py-20 lg:py-28">
+    <div class="mx-auto max-w-3xl space-y-8">
+      <p class="text-sm font-medium uppercase tracking-widest text-brand-muted">
+        Institutional Digital Finance
+      </p>
+      <h1 class="text-4xl font-semibold tracking-tight text-brand-navy md:text-5xl">
+        Insights on stablecoins, tokenization, and compliance
+      </h1>
+      <p class="text-lg leading-relaxed text-brand-muted">
+        {siteDescription}
+      </p>
+      <div class="pt-4">
+        <a
+          href={blog()}
+          class="inline-flex items-center rounded-md border border-brand-navy bg-brand-navy px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-slate"
+        >
+          View the blog
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-brand-border bg-brand-surface">
+    <div class="container-page py-16">
+      <div class="mx-auto max-w-3xl space-y-4">
+        <h2 class="text-2xl font-semibold text-brand-navy">Built for institutional readers</h2>
+        <p class="leading-relaxed text-brand-muted">
+          The FazeZero blog covers stablecoin payments, tokenization, compliance, implementation,
+          and market developments with a focus on clarity, rigor, and practical guidance for
+          financial institutions and enterprise teams.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

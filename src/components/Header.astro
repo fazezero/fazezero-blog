@@ -1,0 +1,69 @@
+---
+import { navigation, siteName } from '@/data/site';
+---
+
+<header class="border-b border-brand-border bg-white">
+  <div class="container-page flex items-center justify-between py-5">
+    <a href="/" class="text-lg font-semibold tracking-tight text-brand-navy hover:text-brand-slate">
+      {siteName}
+    </a>
+
+    <nav class="hidden items-center gap-6 lg:flex" aria-label="Main navigation">
+      {
+        navigation.map((item) => (
+          <a
+            href={item.href}
+            class="text-sm text-brand-muted hover:text-brand-navy"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button
+      type="button"
+      id="mobile-menu-button"
+      class="inline-flex items-center justify-center rounded-md border border-brand-border p-2 text-brand-navy hover:bg-brand-surface lg:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label="Toggle navigation menu"
+    >
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <nav
+    id="mobile-menu"
+    class="hidden border-t border-brand-border bg-white lg:hidden"
+    aria-label="Mobile navigation"
+  >
+    <div class="container-page flex flex-col gap-1 py-4">
+      {
+        navigation.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-md px-3 py-2 text-sm text-brand-muted hover:bg-brand-surface hover:text-brand-navy"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>
+
+<script>
+  const button = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+
+  if (button && menu) {
+    button.addEventListener('click', () => {
+      const isOpen = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden', isOpen);
+      button.setAttribute('aria-expanded', String(!isOpen));
+    });
+  }
+</script>

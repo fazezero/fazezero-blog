@@ -1,0 +1,27 @@
+---
+interface Props {
+  title: string;
+  message: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { title, message, ctaLabel, ctaHref } = Astro.props;
+---
+
+<div class="rounded-lg border border-dashed border-brand-border bg-brand-surface px-8 py-16 text-center">
+  <h2 class="text-xl font-semibold text-brand-navy">{title}</h2>
+  <p class="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-brand-muted">
+    {message}
+  </p>
+  {
+    ctaLabel && ctaHref && (
+      <a
+        href={ctaHref}
+        class="mt-8 inline-flex items-center rounded-md border border-brand-border bg-white px-4 py-2 text-sm font-medium text-brand-navy hover:bg-brand-surface"
+      >
+        {ctaLabel}
+      </a>
+    )
+  }
+</div>

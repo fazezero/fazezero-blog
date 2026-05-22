@@ -1,0 +1,52 @@
+rules:
+  - id: guaranteed-returns
+    severity: error
+    message: Avoid guaranteed return or risk-free language.
+    patterns:
+      - guaranteed returns
+      - risk-free
+      - risk free
+      - can't lose
+      - cannot lose
+      - sure profit
+      - guaranteed profit
+      - assured returns
+
+  - id: investment-advice
+    severity: error
+    message: Avoid investment advice or buy/sell recommendations.
+    patterns:
+      - you should buy
+      - you should sell
+      - we recommend investing
+      - we recommend buying
+      - financial advice
+      - investment advice
+      - buy now
+      - sell now
+      - best investment
+
+  - id: unverified-regulatory
+    severity: error
+    message: Avoid unverified regulatory or licensing claims.
+    patterns:
+      - fully licensed in all jurisdictions
+      - licensed everywhere
+      - approved by all regulators
+      - fully compliant in every country
+      - guaranteed compliant
+      - regulatory approval guaranteed
+
+  - id: hype-language
+    severity: warn
+    message: Avoid hype language; prefer measured institutional tone.
+    patterns:
+      - to the moon
+      - revolutionary
+      - disruptive
+      - game-changer
+      - game changer
+      - paradigm shift
+      - unprecedented opportunity
+      - don't miss out
+      - act now

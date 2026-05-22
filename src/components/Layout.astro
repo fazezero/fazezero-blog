@@ -1,0 +1,31 @@
+---
+import '@/styles/global.css';
+import Footer from '@/components/Footer.astro';
+import Header from '@/components/Header.astro';
+import SEO from '@/components/SEO.astro';
+import { siteUrl } from '@/data/site';
+import type { SeoInput } from '@/lib/seo';
+
+interface Props extends SeoInput {
+  class?: string;
+  rss?: boolean;
+}
+
+const { class: className, rss: showRss = true, ...seoProps } = Astro.props;
+const rssUrl = new URL('/rss.xml', siteUrl).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEO {...seoProps} />
+    {showRss && <link rel="alternate" type="application/rss+xml" title="FazeZero Blog RSS" href={rssUrl} />}
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header />
+    <main class:list={['flex-1', className]}>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,144 @@
+---
+import Layout from '@/components/Layout.astro';
+import { getAuthorById } from '@/data/authors';
+import { getCategoryBySlug } from '@/data/categories';
+import { siteUrl } from '@/data/site';
+import { getTagLabel } from '@/data/tags';
+import type { ArticleEntry } from '@/lib/content';
+import { formatSeriesLabel, getEntrySlug } from '@/lib/content';
+import { category, seriesDetail, tag } from '@/lib/routes';
+import { resolveCanonical } from '@/lib/seo';
+import { calculateReadingTime, formatReadingTime } from '@/lib/readingTime';
+
+interface Props {
+  entry: ArticleEntry;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const slug = getEntrySlug(entry);
+const author = getAuthorById(data.author);
+const categoryInfo = getCategoryBySlug(data.category);
+const readingTime = formatReadingTime(calculateReadingTime(entry.body));
+
+const formattedDate = data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedUpdated = data.updated?.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const seoTitle = data.seoTitle ?? data.title;
+const seoDescription = data.seoDescription ?? data.description;
+const socialImage = data.socialImage
+  ? new URL(data.socialImage, siteUrl).toString()
+  : undefined;
+const canonicalPath = `/blog/${slug}`;
+---
+
+<Layout
+  title={seoTitle}
+  description={seoDescription}
+  canonical={resolveCanonical(canonicalPath)}
+  ogTitle={seoTitle}
+  ogDescription={seoDescription}
+  ogImage={socialImage}
+>
+  <article class="container-page py-16 lg:py-20">
+    <header class="mx-auto max-w-3xl space-y-6 border-b border-brand-border pb-10">
+      {
+        categoryInfo && (
+          <a
+            href={category(categoryInfo.slug)}
+            class="inline-flex text-sm font-medium uppercase tracking-wide text-brand-muted hover:text-brand-navy"
+          >
+            {categoryInfo.title}
+          </a>
+        )
+      }
+
+      <h1 class="text-3xl font-semibold tracking-tight text-brand-navy md:text-4xl lg:text-5xl">
+        {data.title}
+      </h1>
+
+      <p class="text-lg leading-relaxed text-brand-muted">{data.description}</p>
+
+      <div class="flex flex-wrap items-center gap-3 text-sm text-brand-muted">
+        {
+          author && <span>By {author.name}</span>
+        }
+        <span aria-hidden="true">&middot;</span>
+        <time datetime={data.date.toISOString()}>{formattedDate}</time>
+        {
+          readingTime && (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <span>{readingTime}</span>
+            </>
+          )
+        }
+        {
+          formattedUpdated && (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <span>Updated {formattedUpdated}</span>
+            </>
+          )
+        }
+      </div>
+
+      {
+        data.series && (
+          <p class="text-sm text-brand-muted">
+            Part of
+            <a href={seriesDetail(data.series)} class="ml-1 font-medium hover:text-brand-navy">
+              {formatSeriesLabel(data.series)}
+            </a>
+            {data.seriesOrder && <span class="ml-1">({data.seriesOrder})</span>}
+          </p>
+        )
+      }
+
+      {
+        data.tags && data.tags.length > 0 && (
+          <ul class="flex flex-wrap gap-2">
+            {
+              data.tags.map((item) => (
+                <li>
+                  <a
+                    href={tag(item.toLowerCase())}
+                    class="rounded-full border border-brand-border px-3 py-1 text-xs text-brand-muted hover:text-brand-navy"
+                  >
+                    {getTagLabel(item)}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        )
+      }
+
+      {
+        data.coverImage && (
+          <figure class="pt-4">
+            <img
+              src={data.coverImage}
+              alt={data.coverImageAlt ?? data.title}
+              class="w-full rounded-lg border border-brand-border object-cover"
+              loading="eager"
+            />
+          </figure>
+        )
+      }
+    </header>
+
+    <div class="prose-article mx-auto max-w-3xl py-12">
+      <slot />
+    </div>
+  </article>
+</Layout>

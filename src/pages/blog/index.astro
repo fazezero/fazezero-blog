@@ -1,0 +1,26 @@
+---
+import ArticleList from '@/components/ArticleList.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { siteDescription } from '@/data/site';
+import { getPublishedArticles } from '@/lib/content';
+import { blog } from '@/lib/routes';
+
+const articles = await getPublishedArticles();
+const currentPage = 1;
+---
+
+<BlogLayout
+  title="Blog"
+  description={siteDescription}
+  canonicalPath={blog()}
+>
+  <ArticleList
+    allArticles={articles}
+    currentPage={currentPage}
+    emptyTitle="No articles yet"
+    emptyMessage="Articles will appear here once MDX content is published using the YYYY/MM/category folder structure."
+    emptyCtaLabel="Browse archive"
+    emptyCtaHref="/blog/archive"
+    getPagePath={blog}
+  />
+</BlogLayout>

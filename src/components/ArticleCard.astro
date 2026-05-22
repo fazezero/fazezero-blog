@@ -1,0 +1,91 @@
+---
+import { getTagLabel } from '@/data/tags';
+import type { ArticleEntry } from '@/lib/content';
+import { formatSeriesLabel, getEntrySlug } from '@/lib/content';
+import { getCategoryBySlug } from '@/data/categories';
+import { getAuthorById } from '@/data/authors';
+import { article, category, seriesDetail, tag } from '@/lib/routes';
+import { calculateReadingTime, formatReadingTime } from '@/lib/readingTime';
+
+interface Props {
+  entry: ArticleEntry;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const slug = getEntrySlug(entry);
+const categoryInfo = getCategoryBySlug(data.category);
+const authorInfo = getAuthorById(data.author);
+const readingTime = formatReadingTime(calculateReadingTime(entry.body));
+const formattedDate = data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="group rounded-lg border border-brand-border bg-white p-6 transition-shadow hover:shadow-sm">
+  <div class="flex flex-wrap items-center gap-3 text-xs uppercase tracking-wide text-brand-muted">
+    {
+      categoryInfo && (
+        <a href={category(categoryInfo.slug)} class="hover:text-brand-navy">
+          {categoryInfo.title}
+        </a>
+      )
+    }
+    <span aria-hidden="true">&middot;</span>
+    <time datetime={data.date.toISOString()}>{formattedDate}</time>
+    {
+      readingTime && (
+        <>
+          <span aria-hidden="true">&middot;</span>
+          <span>{readingTime}</span>
+        </>
+      )
+    }
+  </div>
+
+  <h2 class="mt-4 text-xl font-semibold text-brand-navy">
+    <a href={article(slug)} class="group-hover:underline">
+      {data.title}
+    </a>
+  </h2>
+
+  <p class="mt-3 text-sm leading-relaxed text-brand-muted">{data.description}</p>
+
+  {
+    authorInfo && (
+      <p class="mt-4 text-sm text-brand-muted">By {authorInfo.name}</p>
+    )
+  }
+
+  {
+    data.series && (
+      <p class="mt-3 text-xs uppercase tracking-wide text-brand-muted">
+        Series:
+        <a href={seriesDetail(data.series)} class="ml-1 hover:text-brand-navy">
+          {formatSeriesLabel(data.series)}
+        </a>
+      </p>
+    )
+  }
+
+  {
+    data.tags && data.tags.length > 0 && (
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {
+          data.tags.map((item) => (
+            <li>
+              <a
+                href={tag(item.toLowerCase())}
+                class="rounded-full bg-brand-surface px-2.5 py-1 text-xs text-brand-muted hover:text-brand-navy"
+              >
+                {getTagLabel(item)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    )
+  }
+</article>

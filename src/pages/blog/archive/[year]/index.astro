@@ -1,0 +1,52 @@
+---
+import EmptyState from '@/components/EmptyState.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { formatMonthLabel, getAllMonthsForYear, getAllYears, getArticlesByYear } from '@/lib/content';
+import { archive, archiveMonth, archiveYear } from '@/lib/routes';
+
+export async function getStaticPaths() {
+  const years = await getAllYears();
+
+  return years.map((year) => ({
+    params: { year: String(year) },
+    props: { year },
+  }));
+}
+
+const { year } = Astro.props;
+const months = await getAllMonthsForYear(year);
+const articles = await getArticlesByYear(year);
+---
+
+<BlogLayout
+  title={`Archive ${year}`}
+  description={`Browse articles published in ${year}.`}
+  canonicalPath={archiveYear(year)}
+>
+  {
+    articles.length === 0 ? (
+      <EmptyState
+        title={`No articles in ${year}`}
+        message="Articles for this year will appear here once MDX content is published."
+        ctaLabel="Back to archive"
+        ctaHref={archive()}
+      />
+    ) : (
+      <ul class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {
+          months.map((month) => (
+            <li>
+              <a
+                href={archiveMonth(year, month)}
+                class="block rounded-lg border border-brand-border bg-white p-6 transition-shadow hover:shadow-sm"
+              >
+                <span class="text-lg font-semibold text-brand-navy">{formatMonthLabel(month)}</span>
+                <span class="mt-1 block text-sm text-brand-muted">{year}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    )
+  }
+</BlogLayout>

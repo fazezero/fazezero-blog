@@ -1,0 +1,39 @@
+---
+import Layout from '@/components/Layout.astro';
+import CategoryNav from '@/components/CategoryNav.astro';
+import { resolveCanonical } from '@/lib/seo';
+
+interface Props {
+  title: string;
+  description?: string;
+  activeCategory?: string;
+  canonicalPath?: string;
+}
+
+const { title, description, activeCategory, canonicalPath } = Astro.props;
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonical={canonicalPath ? resolveCanonical(canonicalPath) : undefined}
+>
+  <section class="container-page py-16 lg:py-20">
+    <header class="max-w-3xl space-y-4">
+      <h1 class="text-3xl font-semibold tracking-tight text-brand-navy md:text-4xl">{title}</h1>
+      {
+        description && (
+          <p class="text-base leading-relaxed text-brand-muted">{description}</p>
+        )
+      }
+    </header>
+
+    <div class="mt-10">
+      <CategoryNav activeCategory={activeCategory} />
+    </div>
+
+    <div class="mt-12">
+      <slot />
+    </div>
+  </section>
+</Layout>

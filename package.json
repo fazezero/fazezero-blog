@@ -1,0 +1,36 @@
+{
+  "name": "f0-blog-astro",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fazezero/fazezero-blog.git"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "deploy:aws": "bash scripts/deploy-aws.sh",
+    "new:article": "tsx scripts/new-article.ts",
+    "validate:content": "tsx scripts/validate-content.ts",
+    "check:banned-claims": "tsx scripts/check-banned-claims.ts"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.4.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.8.0",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/node": "^22.15.21",
+    "gray-matter": "^4.0.3",
+    "pagefind": "^1.3.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "yaml": "^2.8.0"
+  }
+}

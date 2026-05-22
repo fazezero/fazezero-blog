@@ -1,0 +1,54 @@
+---
+import ArticleList from '@/components/ArticleList.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import {
+  formatMonthLabel,
+  getAllMonthsForYear,
+  getAllYears,
+  getArticlesByYearMonth,
+  getTotalPages,
+  padMonth,
+} from '@/lib/content';
+import { archive, archiveMonth, archiveMonthPage } from '@/lib/routes';
+
+export async function getStaticPaths() {
+  const years = await getAllYears();
+  const paths: Array<{
+    params: { year: string; month: string };
+    props: { year: number; month: number; currentPage: number };
+  }> = [];
+
+  for (const year of years) {
+    const months = await getAllMonthsForYear(year);
+
+    for (const month of months) {
+      paths.push({
+        params: { year: String(year), month: padMonth(month) },
+        props: { year, month, currentPage: 1 },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { year, month, currentPage } = Astro.props;
+const articles = await getArticlesByYearMonth(year, month);
+const monthLabel = formatMonthLabel(month);
+---
+
+<BlogLayout
+  title={`Archive ${monthLabel} ${year}`}
+  description={`Articles published in ${monthLabel} ${year}.`}
+  canonicalPath={archiveMonth(year, month)}
+>
+  <ArticleList
+    allArticles={articles}
+    currentPage={currentPage}
+    emptyTitle={`No articles in ${monthLabel} ${year}`}
+    emptyMessage="Articles for this month will appear here once MDX content is published."
+    emptyCtaLabel="Back to archive"
+    emptyCtaHref={archive()}
+    getPagePath={(page) => archiveMonthPage(year, month, page)}
+  />
+</BlogLayout>

@@ -1,0 +1,27 @@
+---
+import { resolveSeo, type SeoInput } from '@/lib/seo';
+
+interface Props extends SeoInput {}
+
+const seo = resolveSeo(Astro.props);
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{seo.title}</title>
+<meta name="description" content={seo.description} />
+<link rel="canonical" href={seo.canonical} />
+{seo.noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={seo.ogTitle} />
+<meta property="og:description" content={seo.ogDescription} />
+<meta property="og:url" content={seo.canonical} />
+<meta property="og:image" content={seo.ogImage} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={seo.ogTitle} />
+<meta name="twitter:description" content={seo.ogDescription} />
+<meta name="twitter:image" content={seo.ogImage} />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />

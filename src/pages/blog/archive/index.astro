@@ -1,0 +1,40 @@
+---
+import EmptyState from '@/components/EmptyState.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { getAllYears } from '@/lib/content';
+import { archive, archiveYear, blog } from '@/lib/routes';
+
+const years = await getAllYears();
+---
+
+<BlogLayout
+  title="Archive"
+  description="Browse articles by year and month."
+  canonicalPath={archive()}
+>
+  {
+    years.length === 0 ? (
+      <EmptyState
+        title="No archive years yet"
+        message="Archive years will appear here once published articles are added using the YYYY/MM/category folder structure."
+        ctaLabel="View all articles"
+        ctaHref={blog()}
+      />
+    ) : (
+      <ul class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {
+          years.map((year) => (
+            <li>
+              <a
+                href={archiveYear(year)}
+                class="block rounded-lg border border-brand-border bg-white p-6 transition-shadow hover:shadow-sm"
+              >
+                <span class="text-2xl font-semibold text-brand-navy">{year}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    )
+  }
+</BlogLayout>

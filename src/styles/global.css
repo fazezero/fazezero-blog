@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-white font-sans text-brand-navy antialiased;
+  }
+
+  a {
+    @apply transition-colors duration-150;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-5xl px-6 lg:px-8;
+  }
+
+  .prose-article {
+    @apply prose prose-slate max-w-none prose-headings:font-semibold prose-headings:text-brand-navy prose-a:text-brand-navy prose-a:no-underline hover:prose-a:underline;
+  }
+}

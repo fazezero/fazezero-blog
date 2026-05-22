@@ -1,0 +1,64 @@
+---
+import EmptyState from '@/components/EmptyState.astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { approvedTags } from '@/data/tags';
+import { getAllTags } from '@/lib/content';
+import { blog, tag as tagRoute, tags as tagsRoute } from '@/lib/routes';
+import { getTagLabel } from '@/data/tags';
+
+const usedTags = await getAllTags();
+---
+
+<BlogLayout
+  title="Tags"
+  description="Browse articles by approved topic tags."
+  canonicalPath={tagsRoute()}
+>
+  {
+    usedTags.length === 0 ? (
+      <EmptyState
+        title="No tags yet"
+        message="Tags will appear here once published articles include approved tags from the central tag list."
+        ctaLabel="View all articles"
+        ctaHref={blog()}
+      />
+    ) : (
+      <div class="space-y-8">
+        <ul class="flex flex-wrap gap-2">
+          {
+            usedTags.map((tagSlug) => (
+              <li>
+                <a
+                  href={tagRoute(tagSlug)}
+                  class="rounded-full border border-brand-border px-3 py-1.5 text-sm text-brand-muted hover:text-brand-navy"
+                >
+                  {getTagLabel(tagSlug)}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <section class="rounded-lg border border-brand-border bg-brand-surface p-6">
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">
+            Approved tag list
+          </h2>
+          <p class="mt-2 text-sm text-brand-muted">
+            Only tags from this list may be used in article frontmatter.
+          </p>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {
+              approvedTags.map((tag) => (
+                <li>
+                  <span class="rounded-full bg-white px-2.5 py-1 text-xs text-brand-muted">
+                    {tag.label}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </div>
+    )
+  }
+</BlogLayout>
