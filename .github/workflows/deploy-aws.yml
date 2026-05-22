@@ -87,11 +87,8 @@ jobs:
             --cache-control "public, max-age=31536000, immutable" \
             --exclude "*.html"
 
-          echo "Uploading HTML files with no-cache..."
-          aws s3 sync "${{ env.OUTPUT_DIR }}" "s3://${{ secrets.S3_BUCKET_NAME }}/" \
-            --exclude "*" \
-            --include "*.html" \
-            --cache-control "no-cache, must-revalidate"
+          echo "Uploading HTML routes..."
+          bash scripts/sync-html-to-s3.sh "${{ env.OUTPUT_DIR }}" "${{ secrets.S3_BUCKET_NAME }}" "${{ env.AWS_REGION }}"
 
           echo "S3 deploy completed"
 

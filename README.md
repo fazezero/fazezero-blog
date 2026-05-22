@@ -186,17 +186,11 @@ npm run deploy:aws
 
 The script loads `.env`, builds the site, syncs `dist/` to S3 (immutable assets + no-cache HTML), and invalidates CloudFront.
 
-### CloudFront URL rewrite (required)
+### CloudFront URL rewrite (optional)
 
-S3 REST origins do not map `/blog/category/foo/` to `/blog/category/foo/index.html`. Attach the CloudFront Function in [`infrastructure/cloudfront-index-rewrite.js`](infrastructure/cloudfront-index-rewrite.js):
+The deploy script uploads each page to three S3 keys (`route/index.html`, `route`, and `route/`), so nested links work on S3 REST origins without a CloudFront function.
 
-1. CloudFront → **Functions** → Create function (copy script from repo)
-2. Publish the function
-3. Distribution → **Behaviors** → Default → **Edit**
-4. **Viewer request** → associate `fazezero-blog-index-rewrite`
-5. Save and wait for deployment
-
-Without this function, nested routes return S3 `AccessDenied` while `/` works.
+If you prefer a slimmer bucket, attach [`infrastructure/cloudfront-index-rewrite.js`](infrastructure/cloudfront-index-rewrite.js) to the distribution **Viewer request** instead.
 
 ## Project structure
 

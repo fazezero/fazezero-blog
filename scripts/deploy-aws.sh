@@ -30,17 +30,14 @@ aws s3 sync "$OUTPUT_DIR" "s3://${S3_BUCKET_NAME}/" \
   --exclude "*.html" \
   --region "$AWS_REGION"
 
-echo "Uploading HTML files with no-cache..."
-aws s3 sync "$OUTPUT_DIR" "s3://${S3_BUCKET_NAME}/" \
-  --exclude "*" \
-  --include "*.html" \
-  --cache-control "no-cache, must-revalidate" \
-  --region "$AWS_REGION"
+echo "Uploading HTML routes..."
+bash scripts/sync-html-to-s3.sh "$OUTPUT_DIR" "$S3_BUCKET_NAME" "$AWS_REGION"
 
 echo "Invalidating CloudFront..."
 aws cloudfront create-invalidation \
   --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
-  --paths "/*"
+  --paths "/*" \
+  --region "$AWS_REGION"
 
 echo "Deployment complete"
 echo "Bucket: s3://${S3_BUCKET_NAME}/"
