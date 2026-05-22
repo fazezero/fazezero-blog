@@ -30,7 +30,7 @@ const usedTags = await getAllTags();
               <li>
                 <a
                   href={tagRoute(tagSlug)}
-                  class="rounded-full border border-brand-border px-3 py-1.5 text-sm text-brand-muted hover:text-brand-navy"
+                  class="badge hover:border-brand-primary/40 hover:text-brand-primary"
                 >
                   {getTagLabel(tagSlug)}
                 </a>
@@ -39,10 +39,8 @@ const usedTags = await getAllTags();
           }
         </ul>
 
-        <section class="rounded-lg border border-brand-border bg-brand-surface p-6">
-          <h2 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">
-            Approved tag list
-          </h2>
+        <section class="card">
+          <h2 class="eyebrow">Approved tag list</h2>
           <p class="mt-2 text-sm text-brand-muted">
             Only tags from this list may be used in article frontmatter.
           </p>
@@ -50,7 +48,7 @@ const usedTags = await getAllTags();
             {
               approvedTags.map((tag) => (
                 <li>
-                  <span class="rounded-full bg-white px-2.5 py-1 text-xs text-brand-muted">
+                  <span class="badge">
                     {tag.label}
                   </span>
                 </li>

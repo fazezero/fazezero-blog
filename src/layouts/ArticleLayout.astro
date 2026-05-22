@@ -55,18 +55,18 @@ const canonicalPath = `/blog/${slug}`;
         categoryInfo && (
           <a
             href={category(categoryInfo.slug)}
-            class="inline-flex text-sm font-medium uppercase tracking-wide text-brand-muted hover:text-brand-navy"
+            class="eyebrow hover:text-brand-accent"
           >
             {categoryInfo.title}
           </a>
         )
       }
 
-      <h1 class="text-3xl font-semibold tracking-tight text-brand-navy md:text-4xl lg:text-5xl">
+      <h1 class="text-3xl font-bold tracking-tight text-brand-ink md:text-4xl lg:text-5xl">
         {data.title}
       </h1>
 
-      <p class="text-lg leading-relaxed text-brand-muted">{data.description}</p>
+      <p class="text-lg leading-relaxed text-brand-slate">{data.description}</p>
 
       <div class="flex flex-wrap items-center gap-3 text-sm text-brand-muted">
         {
@@ -96,7 +96,7 @@ const canonicalPath = `/blog/${slug}`;
         data.series && (
           <p class="text-sm text-brand-muted">
             Part of
-            <a href={seriesDetail(data.series)} class="ml-1 font-medium hover:text-brand-navy">
+            <a href={seriesDetail(data.series)} class="ml-1 font-medium text-brand-primary hover:text-brand-accent">
               {formatSeriesLabel(data.series)}
             </a>
             {data.seriesOrder && <span class="ml-1">({data.seriesOrder})</span>}
@@ -112,7 +112,7 @@ const canonicalPath = `/blog/${slug}`;
                 <li>
                   <a
                     href={tag(item.toLowerCase())}
-                    class="rounded-full border border-brand-border px-3 py-1 text-xs text-brand-muted hover:text-brand-navy"
+                    class="badge hover:border-brand-primary/40 hover:text-brand-primary"
                   >
                     {getTagLabel(item)}
                   </a>

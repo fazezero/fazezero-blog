@@ -13,10 +13,7 @@ const { currentPage, totalPages, getPagePath } = Astro.props;
     <nav class="mt-12 flex items-center justify-center gap-2" aria-label="Pagination">
       {
         currentPage > 1 && (
-          <a
-            href={getPagePath(currentPage - 1)}
-            class="rounded-md border border-brand-border px-3 py-1.5 text-sm text-brand-muted hover:text-brand-navy"
-          >
+          <a href={getPagePath(currentPage - 1)} class="btn-secondary px-3 py-1.5">
             Previous
           </a>
         )
@@ -30,12 +27,7 @@ const { currentPage, totalPages, getPagePath } = Astro.props;
           return (
             <a
               href={getPagePath(page)}
-              class:list={[
-                'rounded-md border px-3 py-1.5 text-sm',
-                isCurrent
-                  ? 'border-brand-navy bg-brand-navy text-white'
-                  : 'border-brand-border text-brand-muted hover:text-brand-navy',
-              ]}
+              class:list={['badge px-3 py-1.5', isCurrent && 'badge-active']}
               aria-current={isCurrent ? 'page' : undefined}
             >
               {page}
@@ -46,10 +38,7 @@ const { currentPage, totalPages, getPagePath } = Astro.props;
 
       {
         currentPage < totalPages && (
-          <a
-            href={getPagePath(currentPage + 1)}
-            class="rounded-md border border-brand-border px-3 py-1.5 text-sm text-brand-muted hover:text-brand-navy"
-          >
+          <a href={getPagePath(currentPage + 1)} class="btn-secondary px-3 py-1.5">
             Next
           </a>
         )

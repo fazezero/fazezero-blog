@@ -13,12 +13,7 @@ const categories = getAllCategories();
 <nav class="flex flex-wrap gap-2" aria-label="Blog categories">
   <a
     href={blog()}
-    class:list={[
-      'rounded-full border px-3 py-1.5 text-sm transition-colors',
-      !activeCategory
-        ? 'border-brand-navy bg-brand-navy text-white'
-        : 'border-brand-border text-brand-muted hover:border-brand-slate hover:text-brand-navy',
-    ]}
+    class:list={['badge', !activeCategory ? 'badge-active' : 'hover:border-brand-primary/40 hover:text-brand-primary']}
   >
     All
   </a>
@@ -27,10 +22,10 @@ const categories = getAllCategories();
       <a
         href={categoryRoute(item.slug)}
         class:list={[
-          'rounded-full border px-3 py-1.5 text-sm transition-colors',
+          'badge',
           activeCategory === item.slug
-            ? 'border-brand-navy bg-brand-navy text-white'
-            : 'border-brand-border text-brand-muted hover:border-brand-slate hover:text-brand-navy',
+            ? 'badge-active'
+            : 'hover:border-brand-primary/40 hover:text-brand-primary',
         ]}
       >
         {item.title}

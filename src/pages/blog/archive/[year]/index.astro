@@ -38,9 +38,9 @@ const articles = await getArticlesByYear(year);
             <li>
               <a
                 href={archiveMonth(year, month)}
-                class="block rounded-lg border border-brand-border bg-white p-6 transition-shadow hover:shadow-sm"
+                class="card-interactive block"
               >
-                <span class="text-lg font-semibold text-brand-navy">{formatMonthLabel(month)}</span>
+                <span class="text-lg font-semibold text-brand-ink group-hover:text-brand-primary">{formatMonthLabel(month)}</span>
                 <span class="mt-1 block text-sm text-brand-muted">{year}</span>
               </a>
             </li>

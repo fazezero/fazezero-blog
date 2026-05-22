@@ -27,9 +27,9 @@ const allSeries = await getAllSeries();
             <li>
               <a
                 href={seriesDetail(seriesSlug)}
-                class="block rounded-lg border border-brand-border bg-white p-6 transition-shadow hover:shadow-sm"
+                class="card-interactive block"
               >
-                <span class="text-lg font-semibold text-brand-navy">
+                <span class="text-lg font-semibold text-brand-ink group-hover:text-brand-primary">
                   {formatSeriesLabel(seriesSlug)}
                 </span>
               </a>
