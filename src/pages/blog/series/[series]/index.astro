@@ -16,12 +16,15 @@ export async function getStaticPaths() {
 const { seriesSlug, currentPage } = Astro.props;
 const articles = await getArticlesBySeries(seriesSlug);
 const seriesLabel = formatSeriesLabel(seriesSlug);
+const totalPages = getTotalPages(articles.length);
+const getPagePath = (page: number) => seriesDetail(seriesSlug, page);
 ---
 
 <BlogLayout
   title={`Series: ${seriesLabel}`}
   description={`Articles in the ${seriesLabel} series.`}
   canonicalPath={seriesDetail(seriesSlug)}
+  pagination={{ currentPage, totalPages, getPagePath }}
 >
   <ArticleList
     allArticles={articles}
@@ -30,6 +33,6 @@ const seriesLabel = formatSeriesLabel(seriesSlug);
     emptyMessage="Articles in this series will appear here once MDX content with matching series metadata is published."
     emptyCtaLabel="Browse all series"
     emptyCtaHref={seriesRoute()}
-    getPagePath={(page) => seriesDetail(seriesSlug, page)}
+    getPagePath={getPagePath}
   />
 </BlogLayout>

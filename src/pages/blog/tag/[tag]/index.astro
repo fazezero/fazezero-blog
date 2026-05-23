@@ -17,12 +17,15 @@ export async function getStaticPaths() {
 const { tag, currentPage } = Astro.props;
 const articles = await getArticlesByTag(tag);
 const tagLabel = getTagLabel(tag) || formatTagLabel(tag);
+const totalPages = getTotalPages(articles.length);
+const getPagePath = (page: number) => tagRoute(tag, page);
 ---
 
 <BlogLayout
   title={`Tag: ${tagLabel}`}
   description={`Articles tagged with ${tagLabel}.`}
   canonicalPath={tagRoute(tag)}
+  pagination={{ currentPage, totalPages, getPagePath }}
 >
   <ArticleList
     allArticles={articles}
@@ -31,6 +34,6 @@ const tagLabel = getTagLabel(tag) || formatTagLabel(tag);
     emptyMessage="Articles with this tag will appear here once MDX content is published."
     emptyCtaLabel="Browse all tags"
     emptyCtaHref="/blog/tags"
-    getPagePath={(page) => tagRoute(tag, page)}
+    getPagePath={getPagePath}
   />
 </BlogLayout>

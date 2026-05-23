@@ -35,12 +35,15 @@ export async function getStaticPaths() {
 const { year, month, currentPage } = Astro.props;
 const articles = await getArticlesByYearMonth(year, month);
 const monthLabel = formatMonthLabel(month);
+const totalPages = getTotalPages(articles.length);
+const getPagePath = (page: number) => archiveMonthPage(year, month, page);
 ---
 
 <BlogLayout
   title={`Archive ${monthLabel} ${year}`}
   description={`Articles published in ${monthLabel} ${year}.`}
   canonicalPath={archiveMonth(year, month)}
+  pagination={{ currentPage, totalPages, getPagePath }}
 >
   <ArticleList
     allArticles={articles}
@@ -49,6 +52,6 @@ const monthLabel = formatMonthLabel(month);
     emptyMessage="Articles for this month will appear here once MDX content is published."
     emptyCtaLabel="Back to archive"
     emptyCtaHref={archive()}
-    getPagePath={(page) => archiveMonthPage(year, month, page)}
+    getPagePath={getPagePath}
   />
 </BlogLayout>

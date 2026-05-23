@@ -7,6 +7,8 @@ import { getTagLabel } from '@/data/tags';
 import type { ArticleEntry } from '@/lib/content';
 import { formatSeriesLabel, getEntrySlug } from '@/lib/content';
 import { category, seriesDetail, tag } from '@/lib/routes';
+import { defaultSocialImage } from '@/data/site';
+import { buildBlogPostingJsonLd } from '@/lib/jsonLd';
 import { resolveCanonical } from '@/lib/seo';
 import { calculateReadingTime, formatReadingTime } from '@/lib/readingTime';
 
@@ -39,16 +41,28 @@ const socialImage = data.socialImage
   ? new URL(data.socialImage, siteUrl).toString()
   : undefined;
 const canonicalPath = `/blog/${slug}`;
+const canonicalUrl = resolveCanonical(canonicalPath);
+const ogImage = socialImage ?? defaultSocialImage;
+const jsonLd = buildBlogPostingJsonLd({
+  entry,
+  authorName: author?.name ?? 'FazeZero Editorial Team',
+  imageUrl: ogImage,
+});
 ---
 
 <Layout
   title={seoTitle}
   description={seoDescription}
-  canonical={resolveCanonical(canonicalPath)}
+  canonical={canonicalUrl}
   ogTitle={seoTitle}
   ogDescription={seoDescription}
-  ogImage={socialImage}
+  ogImage={ogImage}
+  ogType="article"
+  articlePublishedTime={data.date.toISOString()}
+  articleModifiedTime={(data.updated ?? data.date).toISOString()}
+  articleAuthor={author?.name}
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <article class="container-page py-16 lg:py-20">
     <header class="mx-auto max-w-3xl space-y-6 border-b border-brand-border pb-10">
       {

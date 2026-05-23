@@ -1,22 +1,25 @@
 ---
 import Layout from '@/components/Layout.astro';
 import CategoryNav from '@/components/CategoryNav.astro';
-import { resolveCanonical } from '@/lib/seo';
+import { resolveCanonical, resolvePaginationSeo, type PaginationSeoInput } from '@/lib/seo';
 
 interface Props {
   title: string;
   description?: string;
   activeCategory?: string;
   canonicalPath?: string;
+  pagination?: PaginationSeoInput;
 }
 
-const { title, description, activeCategory, canonicalPath } = Astro.props;
+const { title, description, activeCategory, canonicalPath, pagination } = Astro.props;
+const paginationSeo = pagination ? resolvePaginationSeo(pagination) : {};
 ---
 
 <Layout
   title={title}
   description={description}
   canonical={canonicalPath ? resolveCanonical(canonicalPath) : undefined}
+  {...paginationSeo}
 >
   <section class="container-page py-16 lg:py-20">
     <header class="max-w-3xl space-y-4">

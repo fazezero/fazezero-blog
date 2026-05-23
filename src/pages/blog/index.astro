@@ -2,17 +2,19 @@
 import ArticleList from '@/components/ArticleList.astro';
 import BlogLayout from '@/layouts/BlogLayout.astro';
 import { siteDescription } from '@/data/site';
-import { getPublishedArticles } from '@/lib/content';
+import { getPublishedArticles, getTotalPages } from '@/lib/content';
 import { blog } from '@/lib/routes';
 
 const articles = await getPublishedArticles();
 const currentPage = 1;
+const totalPages = getTotalPages(articles.length);
 ---
 
 <BlogLayout
   title="Blog"
   description={siteDescription}
   canonicalPath={blog()}
+  pagination={{ currentPage, totalPages, getPagePath: blog }}
 >
   <ArticleList
     allArticles={articles}

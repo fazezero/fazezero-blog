@@ -21,12 +21,14 @@ export async function getStaticPaths() {
 
 const { currentPage } = Astro.props;
 const articles = await getPublishedArticles();
+const totalPages = getTotalPages(articles.length);
 ---
 
 <BlogLayout
   title={`Blog — Page ${currentPage}`}
   description={siteDescription}
   canonicalPath={blog(currentPage)}
+  pagination={{ currentPage, totalPages, getPagePath: blog }}
 >
   <ArticleList
     allArticles={articles}

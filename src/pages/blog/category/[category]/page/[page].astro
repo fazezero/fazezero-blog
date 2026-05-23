@@ -26,6 +26,8 @@ export async function getStaticPaths() {
 
 const { category, currentPage } = Astro.props;
 const articles = await getArticlesByCategory(category.slug);
+const totalPages = getTotalPages(articles.length);
+const getPagePath = (page: number) => categoryRoute(category.slug, page);
 ---
 
 <BlogLayout
@@ -33,12 +35,13 @@ const articles = await getArticlesByCategory(category.slug);
   description={category.description}
   activeCategory={category.slug}
   canonicalPath={categoryRoute(category.slug, currentPage)}
+  pagination={{ currentPage, totalPages, getPagePath }}
 >
   <ArticleList
     allArticles={articles}
     currentPage={currentPage}
     emptyTitle={`No articles in ${category.title}`}
     emptyMessage="Articles in this category will appear here once MDX content is published."
-    getPagePath={(page) => categoryRoute(category.slug, page)}
+    getPagePath={getPagePath}
   />
 </BlogLayout>

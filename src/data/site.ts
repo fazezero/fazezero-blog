@@ -18,6 +18,7 @@ export const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'https://blog.fazezero
 export const defaultSeoTitle = `${siteName} Blog`;
 export const defaultSeoDescription = siteDescription;
 export const defaultSocialImage = `${siteUrl}/social/default-og.png`;
+export const twitterSite = '@fazezero_';
 
 export const author = defaultAuthorId;
 

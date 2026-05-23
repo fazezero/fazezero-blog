@@ -34,18 +34,21 @@ export async function getStaticPaths() {
 const { seriesSlug, currentPage } = Astro.props;
 const articles = await getArticlesBySeries(seriesSlug);
 const seriesLabel = formatSeriesLabel(seriesSlug);
+const totalPages = getTotalPages(articles.length);
+const getPagePath = (page: number) => seriesDetail(seriesSlug, page);
 ---
 
 <BlogLayout
   title={`Series: ${seriesLabel} — Page ${currentPage}`}
   description={`Articles in the ${seriesLabel} series.`}
   canonicalPath={seriesDetail(seriesSlug, currentPage)}
+  pagination={{ currentPage, totalPages, getPagePath }}
 >
   <ArticleList
     allArticles={articles}
     currentPage={currentPage}
     emptyTitle={`No articles in "${seriesLabel}"`}
     emptyMessage="Articles in this series will appear here once MDX content is published."
-    getPagePath={(page) => seriesDetail(seriesSlug, page)}
+    getPagePath={getPagePath}
   />
 </BlogLayout>
