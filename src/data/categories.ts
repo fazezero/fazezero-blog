@@ -41,6 +41,12 @@ export const categories: Category[] = [
     description:
       'Perspectives from the FazeZero team on building institutional-grade digital finance infrastructure.',
   },
+  {
+    title: 'Offers',
+    slug: 'offers',
+    description:
+      'How the public offers work: Production Sprint, Exam War Room, Operator Lab, and the fence around what we will not do.',
+  },
 ];
 
 export function getAllCategories(): Category[] {

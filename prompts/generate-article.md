@@ -19,7 +19,7 @@ Produce a complete MDX file with YAML frontmatter followed by the article body.
 ```yaml
 title: "Article title (sentence case)"
 description: "50–160 character summary for listings and SEO"
-category: one of stablecoin-payments | tokenization | compliance | implementation | market-notes | founder-notes
+category: one of stablecoin-payments | tokenization | digital-asset-compliance | enterprise-implementation | market-notes | founder-notes | offers
 tags:
   - "lowercase-tag"
 author: "fazezero-editorial"
@@ -57,6 +57,7 @@ Target length: 800–1200 words for published articles.
 | implementation | Architecture, integration, operations, rollout |
 | market-notes | Industry trends, market structure (no price predictions) |
 | founder-notes | Team perspective on building institutional infrastructure |
+| offers | Public product offers, fit, commercial fence, and how we work |
 
 ## Banned language (never include)
 

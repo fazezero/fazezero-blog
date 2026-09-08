@@ -12,6 +12,7 @@ const VALID_CATEGORIES = [
   'enterprise-implementation',
   'market-notes',
   'founder-notes',
+  'offers',
 ];
 
 function parseArgs(): Record<string, string> {

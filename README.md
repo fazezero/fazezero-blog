@@ -49,7 +49,7 @@ Note: `slug` is derived from the filename, not stored in frontmatter (Astro cont
 
 ## Primary categories
 
-Six fixed primary categories:
+Seven fixed primary categories:
 
 | Title | Slug |
 |---|---|
@@ -59,6 +59,7 @@ Six fixed primary categories:
 | Enterprise Implementation | `enterprise-implementation` |
 | Market Notes | `market-notes` |
 | Founder Notes | `founder-notes` |
+| Offers | `offers` |
 
 Every article belongs to exactly one primary category. Category pages pre-render with empty states when no articles exist.
 
